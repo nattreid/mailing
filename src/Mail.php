@@ -117,7 +117,7 @@ class Mail {
             $this->latte->setLoader(new \Latte\Loaders\StringLoader);
             $body = $this->latte->renderToString($this->template, $this->params);
         } else {
-            $body = $this->latte->renderToString(__DIR__ . AbstractMailer::PATH . $this->template . '.latte', $this->params);
+            $body = $this->latte->renderToString($this->basePath . '/' . $this->template . '.latte', $this->params);
         }
 
         $this->message->setHtmlBody($body, $this->basePath . '/' . $this->imagePath);
