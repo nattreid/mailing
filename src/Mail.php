@@ -104,7 +104,9 @@ class Mail {
      * @return Message
      */
     public function setFrom($email, $name = NULL) {
-        return $this->message->setFrom($email, $name);
+        if (!empty($email)) {
+            return $this->message->setFrom($email, $name);
+        }
     }
 
     /**
