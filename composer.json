@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": ">= 5.6",
+        "nattreid/utils": "dev-master",
         "nette/application": "~2.3",
         "nette/mail": "~2.3",
         "nette/di": "~2.3",
