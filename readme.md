@@ -7,7 +7,7 @@ extensions:
 mailing:
     sender: 'sender <info@test.cz>'
     path: %appDir%/templates/mailing/
-    class: App/Service/Mailing
+    class: App/Service/Mailer
 ```
 
 ## Použití
@@ -35,4 +35,12 @@ class Mailer extends \NAttreid\Mailing\BaseMailer {
 
         $mail->send();
     }
+```
+
+Odeslání
+```php
+/** @var \App\Services\Mailer @inject */
+public $mailer;
+
+$this->mailer->sendRestorePassword($email, $hash);
 ```
