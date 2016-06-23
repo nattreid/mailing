@@ -23,7 +23,7 @@ class Extension extends \Nette\DI\CompilerExtension {
 
         if (!isset($config['path'])) {
             throw new \Nette\InvalidArgumentException("Missing value 'path' for mailing");
-        }if (!isset($config['class'])) {
+        } elseif (!isset($config['class'])) {
             throw new \Nette\InvalidArgumentException("Missing value 'class' for mailing");
         }
 
