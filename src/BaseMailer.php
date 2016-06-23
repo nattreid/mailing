@@ -11,7 +11,9 @@ use Nette\Application\LinkGenerator,
  *
  * Attreid <attreid@gmail.com>
  */
-abstract class BaseMailer extends \Nette\Object {
+abstract class BaseMailer {
+
+    use \Nette\SmartObject;
 
     /** @var IMailer */
     private $mailer;
