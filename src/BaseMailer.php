@@ -4,8 +4,7 @@ namespace NAttreid\Mailing;
 
 use Nette\Application\LinkGenerator,
     Nette\Mail\IMailer,
-    Kdyby\Translation\Translator,
-    NAttreid\Utils\Hasher;
+    Kdyby\Translation\Translator;
 
 /**
  * Mailer
@@ -26,15 +25,11 @@ abstract class BaseMailer extends \Nette\Object {
     /** @var IMail */
     protected $mailFactory;
 
-    /** @var Hasher */
-    protected $hasher;
-
-    public function __construct(LinkGenerator $linkGenerator, Translator $translator, Imailer $mailer, IMail $mailFactory, Hasher $hasher) {
+    public function __construct(LinkGenerator $linkGenerator, Translator $translator, Imailer $mailer, IMail $mailFactory) {
         $this->mailer = $mailer;
         $this->linkGenerator = $linkGenerator;
         $this->translator = $translator;
         $this->mailFactory = $mailFactory;
-        $this->hasher = $hasher;
     }
 
     /**
