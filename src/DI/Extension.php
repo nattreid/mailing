@@ -34,7 +34,6 @@ class Extension extends \Nette\DI\CompilerExtension {
                 ->setImplement('\NAttreid\Mailing\IMail')
                 ->setFactory('\NAttreid\Mailing\Mail')
                 ->setArguments(['%template%', $config['path']])
-                ->setAutowired(TRUE)
                 ->addSetup('setFrom', [$config['sender']]);
     }
 
