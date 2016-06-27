@@ -7,7 +7,7 @@ namespace NAttreid\Mailing\DI;
  *
  * Attreid <attreid@gmail.com>
  */
-class Extension extends \Nette\DI\CompilerExtension {
+class MailingExtension extends \Nette\DI\CompilerExtension {
 
     /** @var array */
     private $defaults = [

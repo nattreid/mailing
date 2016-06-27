@@ -2,7 +2,7 @@
 Nastavení v **config.neon**
 ```neon
 extensions:
-    - NAttreid\Mailing\DI\Extension
+    - NAttreid\Mailing\DI\MailingExtension
 
 mailing:
     sender: 'sender <info@test.cz>'
