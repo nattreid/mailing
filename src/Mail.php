@@ -25,7 +25,7 @@ class Mail {
         \Nette\Bridges\ApplicationLatte\UIMacros::install($this->latte->getCompiler());
 
         $this->latte->addFilter('translate', $translator === NULL ? NULL : [$translator, 'translate']);
-        $this->latte->addFilter(NULL, '\NAttreid\Latte::common');
+        $this->latte->addFilter(NULL, 'NAttreid\Latte::common');
 
         $this->params = [
             '_control' => $linkGenerator // kvůli makru {link}
