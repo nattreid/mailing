@@ -31,8 +31,8 @@ class Extension extends \Nette\DI\CompilerExtension {
                 ->setClass($config['class']);
 
         $builder->addDefinition($this->prefix('mailing.mail'))
-                ->setImplement('\NAttreid\Mailing\IMail')
-                ->setFactory('\NAttreid\Mailing\Mail')
+                ->setImplement('NAttreid\Mailing\IMail')
+                ->setFactory('NAttreid\Mailing\Mail')
                 ->setArguments(['%template%', $config['path']])
                 ->addSetup('setFrom', [$config['sender']]);
     }
