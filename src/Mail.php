@@ -5,7 +5,7 @@ namespace NAttreid\Mailing;
 use Nette\Mail\Message,
     Nette\Application\LinkGenerator,
     Nette\Mail\IMailer,
-    Kdyby\Translation\Translator;
+    Nette\Localization\ITranslator;
 
 class Mail {
 
@@ -19,7 +19,7 @@ class Mail {
     private $basePath;
     private $imagePath = 'images/';
 
-    public function __construct($template, $basePath, LinkGenerator $linkGenerator, Translator $translator, IMailer $mailer) {
+    public function __construct($template, $basePath, LinkGenerator $linkGenerator, ITranslator $translator, IMailer $mailer) {
         $this->latte = new \Latte\Engine;
 
         \Nette\Bridges\ApplicationLatte\UIMacros::install($this->latte->getCompiler());

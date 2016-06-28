@@ -4,7 +4,7 @@ namespace NAttreid\Mailing;
 
 use Nette\Application\LinkGenerator,
     Nette\Mail\IMailer,
-    Kdyby\Translation\Translator;
+    Nette\Localization\ITranslator;
 
 /**
  * Mailer
@@ -21,13 +21,13 @@ abstract class BaseMailer {
     /** @var LinkGenerator */
     private $linkGenerator;
 
-    /** @var Translator */
+    /** @var ITranslator */
     private $translator;
 
     /** @var IMail */
     protected $mailFactory;
 
-    public function __construct(LinkGenerator $linkGenerator, Translator $translator, Imailer $mailer, IMail $mailFactory) {
+    public function __construct(LinkGenerator $linkGenerator, ITranslator $translator, Imailer $mailer, IMail $mailFactory) {
         $this->mailer = $mailer;
         $this->linkGenerator = $linkGenerator;
         $this->translator = $translator;
@@ -47,17 +47,12 @@ abstract class BaseMailer {
 
     /**
      * Translates the given string.
-     *
-     * @param string  $message    The message id
-     * @param integer $count      The number to use to find the indice of the message
-     * @param array   $parameters An array of parameters for the message
-     * @param string  $domain     The domain for the message
-     * @param string  $locale     The locale
-     *
+     * @param  string   message
+     * @param  int      plural count
      * @return string
      */
-    protected function translate($message, $count = NULL, $parameters = [], $domain = NULL, $locale = NULL) {
-        return $this->translator->translate($message, $count, $parameters, $domain, $locale);
+    protected function translate($message, $count = NULL) {
+        return $this->translator->translate($message, $count);
     }
 
 }
