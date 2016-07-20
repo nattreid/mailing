@@ -2,6 +2,9 @@
 
 namespace NAttreid\Mailing\DI;
 
+use NAttreid\Mailing\IMail,
+    NAttreid\Mailing\Mail;
+
 /**
  * Rozsireni
  *
@@ -31,8 +34,8 @@ class MailingExtension extends \Nette\DI\CompilerExtension {
                 ->setClass($config['class']);
 
         $builder->addDefinition($this->prefix('mailing.mail'))
-                ->setImplement('NAttreid\Mailing\IMail')
-                ->setFactory('NAttreid\Mailing\Mail')
+                ->setImplement(IMail::class)
+                ->setFactory(Mail::class)
                 ->setArguments(['%template%', $config['path']])
                 ->addSetup('setFrom', [$config['sender']]);
     }
