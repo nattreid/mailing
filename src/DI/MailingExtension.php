@@ -14,8 +14,8 @@ class MailingExtension extends \Nette\DI\CompilerExtension {
 
     /** @var array */
     private $defaults = [
-        'path' => '',
-        'class' => '',
+        'path' => NULL,
+        'class' => NULL,
         'sender' => '',
     ];
 
