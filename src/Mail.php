@@ -31,7 +31,7 @@ class Mail {
             '_control' => $linkGenerator // kvůli makru {link}
         ];
 
-        $this->basePath = $basePath;
+        $this->basePath = $basePath ? : 'templates/';
         $this->template = $template;
         $this->message = new Message;
         $this->mailer = $mailer;

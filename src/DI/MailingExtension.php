@@ -24,9 +24,7 @@ class MailingExtension extends \Nette\DI\CompilerExtension {
 
         $builder = $this->getContainerBuilder();
 
-        if (!isset($config['path'])) {
-            throw new \Nette\InvalidArgumentException("Missing value 'path' for mailing");
-        } elseif (!isset($config['class'])) {
+        if (!isset($config['class'])) {
             throw new \Nette\InvalidArgumentException("Missing value 'class' for mailing");
         }
 
