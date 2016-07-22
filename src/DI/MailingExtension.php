@@ -27,6 +27,11 @@ class MailingExtension extends \Nette\DI\CompilerExtension {
         if (!isset($config['class'])) {
             throw new \Nette\InvalidArgumentException("Missing value 'class' for mailing");
         }
+        if (!isset($config['path'])) {
+            $rc = new \Nette\Reflection\ClassType($config['class']);
+            $dir = dirname($rc->getFileName());
+            $config['path'] = $dir . '/templates/';
+        }
 
         $builder->addDefinition($this->prefix('mailing'))
                 ->setClass($config['class']);
