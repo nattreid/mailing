@@ -27,7 +27,7 @@ abstract class BaseMailer {
     /** @var IMail */
     protected $mailFactory;
 
-    public function __construct(LinkGenerator $linkGenerator, ITranslator $translator, Imailer $mailer, IMail $mailFactory) {
+    public function __construct(LinkGenerator $linkGenerator, Imailer $mailer, IMail $mailFactory, ITranslator $translator = NULL) {
         $this->mailer = $mailer;
         $this->linkGenerator = $linkGenerator;
         $this->translator = $translator;
@@ -52,7 +52,7 @@ abstract class BaseMailer {
      * @return string
      */
     protected function translate($message, $count = NULL) {
-        return $this->translator->translate($message, $count);
+        return $this->translator !== NULL ? $this->translator->translate($message, $count) : $message;
     }
 
 }

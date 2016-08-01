@@ -19,7 +19,7 @@ class Mail {
     private $basePath;
     private $imagePath = 'images/';
 
-    public function __construct($template, $basePath, LinkGenerator $linkGenerator, ITranslator $translator, IMailer $mailer) {
+    public function __construct($template, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = NULL) {
         $this->latte = new \Latte\Engine;
 
         \Nette\Bridges\ApplicationLatte\UIMacros::install($this->latte->getCompiler());
