@@ -15,6 +15,12 @@ abstract class BaseMailer {
 
     use \Nette\SmartObject;
 
+    /** @var string */
+    private $sender;
+
+    /** @var string */
+    private $basePath;
+
     /** @var IMailer */
     private $mailer;
 
@@ -24,14 +30,23 @@ abstract class BaseMailer {
     /** @var ITranslator */
     private $translator;
 
-    /** @var IMail */
-    protected $mailFactory;
-
-    public function __construct(LinkGenerator $linkGenerator, Imailer $mailer, IMail $mailFactory, ITranslator $translator = NULL) {
+    public function __construct($sender, $basePath, LinkGenerator $linkGenerator, Imailer $mailer, ITranslator $translator = NULL) {
+        $this->sender = $sender;
+        $this->basePath = $basePath;
         $this->mailer = $mailer;
         $this->linkGenerator = $linkGenerator;
         $this->translator = $translator;
-        $this->mailFactory = $mailFactory;
+    }
+
+    /**
+     * Vytvori instanci mailu
+     * @param string $template
+     * @return Mail
+     */
+    protected function createMail($template) {
+        $mail = new Mail($template, $this->basePath, $this->linkGenerator, $this->mailer, $this->translator);
+        $mail->setFrom($this->sender);
+        return $mail;
     }
 
     /**

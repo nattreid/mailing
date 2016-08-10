@@ -6,8 +6,9 @@ extensions:
 
 mailing:
     sender: 'sender <info@test.cz>'
-    path: %appDir%/templates/mailing/
-    class: App/Service/Mailer
+    mailer: 
+        - App/Mailer
+        - App/Mailer2('sender2 <info2@test.cz>')
 ```
 
 ## Použití
@@ -21,9 +22,9 @@ class Mailer extends \NAttreid\Mailing\BaseMailer {
      * @param string $hash
      */
     public function sendRestorePassword($email, $hash) {
-        $mail = $this->mailFactory->create('template');
+        $mail = $this->createMail('template');
         // nebo
-        $mail = $this->mailFactory->create('<body><p>sablona jako string</p></body>);
+        $mail = $this->createMail('<body><p>sablona jako string</p></body>);
         $mail->fromString();
 
         $mail->link = $this->link('someLink', [

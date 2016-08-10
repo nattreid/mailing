@@ -3,7 +3,8 @@
 namespace NAttreid\Mailing\DI;
 
 use NAttreid\Mailing\IMail,
-    NAttreid\Mailing\Mail;
+    NAttreid\Mailing\Mail,
+    Nette\DI\Statement;
 
 /**
  * Rozsireni
@@ -14,33 +15,32 @@ class MailingExtension extends \Nette\DI\CompilerExtension {
 
     /** @var array */
     private $defaults = [
-        'path' => NULL,
-        'class' => NULL,
+        'mailer' => [],
         'sender' => '',
     ];
 
     public function loadConfiguration() {
+        $builder = $this->getContainerBuilder();
         $config = $this->validateConfig($this->defaults, $this->config);
 
-        $builder = $this->getContainerBuilder();
+        $counter = 1;
+        foreach ($config['mailer'] as $mailer) {
+            $sender = $config['sender'];
+            if ($mailer instanceof Statement) {
+                $class = $mailer->getEntity();
+                if (isset($mailer->arguments[0])) {
+                    $sender = $mailer->arguments[0];
+                }
+            } else {
+                $class = $mailer;
+            }
 
-        if (!isset($config['class'])) {
-            throw new \Nette\InvalidArgumentException("Missing value 'class' for mailing");
-        }
-        if (!isset($config['path'])) {
-            $rc = new \Nette\Reflection\ClassType($config['class']);
+            $rc = new \Nette\Reflection\ClassType($mailer);
             $dir = dirname($rc->getFileName());
-            $config['path'] = $dir . '/templates/';
+            $builder->addDefinition($this->prefix('mailer.' . $counter++))
+                    ->setClass($class)
+                    ->setArguments([$sender, $dir]);
         }
-
-        $builder->addDefinition($this->prefix('mailing'))
-                ->setClass($config['class']);
-
-        $builder->addDefinition($this->prefix('mailing.mail'))
-                ->setImplement(IMail::class)
-                ->setFactory(Mail::class)
-                ->setArguments(['%template%', $config['path']])
-                ->addSetup('setFrom', [$config['sender']]);
     }
 
 }
