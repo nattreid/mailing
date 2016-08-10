@@ -2,9 +2,7 @@
 
 namespace NAttreid\Mailing\DI;
 
-use NAttreid\Mailing\IMail,
-    NAttreid\Mailing\Mail,
-    Nette\DI\Statement;
+use Nette\DI\Statement;
 
 /**
  * Rozsireni
