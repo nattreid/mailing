@@ -31,7 +31,7 @@ abstract class BaseMailer
 	/** @var ITranslator */
 	private $translator;
 
-	public function __construct($sender, $basePath, LinkGenerator $linkGenerator, Imailer $mailer, ITranslator $translator = NULL)
+	public function __construct($sender, $basePath, LinkGenerator $linkGenerator, Imailer $mailer, ITranslator $translator = null)
 	{
 		$this->sender = $sender;
 		$this->basePath = $basePath;
@@ -70,9 +70,9 @@ abstract class BaseMailer
 	 * @param  int $count plural count
 	 * @return string
 	 */
-	protected function translate($message, $count = NULL)
+	protected function translate($message, $count = null)
 	{
-		return $this->translator !== NULL ? $this->translator->translate($message, $count) : $message;
+		return $this->translator !== null ? $this->translator->translate($message, $count) : $message;
 	}
 
 }

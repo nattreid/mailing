@@ -21,21 +21,21 @@ class Mail
 	/** @var \Latte\Engine */
 	private $latte;
 	/** @var bool */
-	private $fromString = FALSE;
+	private $fromString = false;
 	/** @var string */
 	private $basePath;
 	/** @var string */
 	private $imagePath = 'images/';
 
-	public function __construct($template, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = NULL)
+	public function __construct($template, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
 	{
 		$this->latte = new \Latte\Engine;
 
 		\Nette\Bridges\ApplicationLatte\UIMacros::install($this->latte->getCompiler());
 
-		$this->latte->addFilter('translate', $translator === NULL ? NULL : [$translator, 'translate']);
+		$this->latte->addFilter('translate', $translator === null ? null : [$translator, 'translate']);
 		$this->latte->addProvider('uiControl', $linkGenerator);
-		$this->latte->addFilter(NULL, 'NAttreid\Latte::common');
+		$this->latte->addFilter(null, 'NAttreid\Latte::common');
 
 		$this->basePath = $basePath . '/templates/';
 		$this->template = $template;
@@ -48,7 +48,7 @@ class Mail
 	 */
 	public function fromString()
 	{
-		$this->fromString = TRUE;
+		$this->fromString = true;
 	}
 
 	public function __set($name, $value)
@@ -106,7 +106,7 @@ class Mail
 	 * @param string $name
 	 * @return Message
 	 */
-	public function addTo($email, $name = NULL)
+	public function addTo($email, $name = null)
 	{
 		return $this->message->addTo($email, $name);
 	}
@@ -117,7 +117,7 @@ class Mail
 	 * @param string $name
 	 * @return Message
 	 */
-	public function setFrom($email, $name = NULL)
+	public function setFrom($email, $name = null)
 	{
 		if (!empty($email)) {
 			$this->message->setFrom($email, $name);
