@@ -2,10 +2,14 @@
 
 namespace NAttreid\Mailing;
 
+use Latte\Engine;
+use Latte\Loaders\StringLoader;
 use Nette\Application\LinkGenerator;
+use Nette\Bridges\ApplicationLatte\UIMacros;
 use Nette\Localization\ITranslator;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
+use Nette\Mail\SendmailMailer;
 
 class Mail
 {
@@ -18,7 +22,7 @@ class Mail
 	private $params;
 	/** @var Message */
 	private $message;
-	/** @var \Latte\Engine */
+	/** @var Engine */
 	private $latte;
 	/** @var bool */
 	private $fromString = false;
@@ -29,9 +33,9 @@ class Mail
 
 	public function __construct($template, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
 	{
-		$this->latte = new \Latte\Engine;
+		$this->latte = new Engine;
 
-		\Nette\Bridges\ApplicationLatte\UIMacros::install($this->latte->getCompiler());
+		UIMacros::install($this->latte->getCompiler());
 
 		$this->latte->addFilter('translate', $translator === null ? null : [$translator, 'translate']);
 		$this->latte->addProvider('uiControl', $linkGenerator);
@@ -76,7 +80,7 @@ class Mail
 	 */
 	public function setCommand($args)
 	{
-		if ($this->mailer instanceof \Nette\Mail\SendmailMailer) {
+		if ($this->mailer instanceof SendmailMailer) {
 			$this->mailer->commandArgs = $args;
 		}
 	}
@@ -131,7 +135,7 @@ class Mail
 	public function send()
 	{
 		if ($this->fromString) {
-			$this->latte->setLoader(new \Latte\Loaders\StringLoader);
+			$this->latte->setLoader(new StringLoader);
 			$body = $this->latte->renderToString($this->template, $this->params);
 		} else {
 			$body = $this->latte->renderToString($this->basePath . '/' . $this->template . '.latte', $this->params);

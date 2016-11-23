@@ -2,14 +2,16 @@
 
 namespace NAttreid\Mailing\DI;
 
+use Nette\DI\CompilerExtension;
 use Nette\DI\Statement;
+use Nette\Reflection\ClassType;
 
 /**
  * Rozsireni
  *
  * Attreid <attreid@gmail.com>
  */
-class MailingExtension extends \Nette\DI\CompilerExtension
+class MailingExtension extends CompilerExtension
 {
 
 	/** @var array */
@@ -35,7 +37,7 @@ class MailingExtension extends \Nette\DI\CompilerExtension
 				$class = $mailer;
 			}
 
-			$rc = new \Nette\Reflection\ClassType($mailer);
+			$rc = new ClassType($mailer);
 			$dir = dirname($rc->getFileName());
 			$builder->addDefinition($this->prefix('mailer.' . $counter++))
 				->setClass($class)

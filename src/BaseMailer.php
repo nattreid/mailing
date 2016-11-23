@@ -3,8 +3,10 @@
 namespace NAttreid\Mailing;
 
 use Nette\Application\LinkGenerator;
+use Nette\Application\UI\InvalidLinkException;
 use Nette\Localization\ITranslator;
 use Nette\Mail\IMailer;
+use Nette\SmartObject;
 
 /**
  * Mailer
@@ -14,7 +16,7 @@ use Nette\Mail\IMailer;
 abstract class BaseMailer
 {
 
-	use \Nette\SmartObject;
+	use SmartObject;
 
 	/** @var string */
 	private $sender;
@@ -31,7 +33,7 @@ abstract class BaseMailer
 	/** @var ITranslator */
 	private $translator;
 
-	public function __construct($sender, $basePath, LinkGenerator $linkGenerator, Imailer $mailer, ITranslator $translator = null)
+	public function __construct($sender, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
 	{
 		$this->sender = $sender;
 		$this->basePath = $basePath;
