@@ -21,6 +21,9 @@ abstract class BaseMailer
 	/** @var string */
 	private $sender;
 
+	/** @var string[] */
+	private $variables;
+
 	/** @var string */
 	private $basePath;
 
@@ -33,9 +36,10 @@ abstract class BaseMailer
 	/** @var ITranslator */
 	private $translator;
 
-	public function __construct($sender, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
+	public function __construct($sender, array $variables, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
 	{
 		$this->sender = $sender;
+		$this->variables = $variables;
 		$this->basePath = $basePath;
 		$this->mailer = $mailer;
 		$this->linkGenerator = $linkGenerator;
@@ -51,6 +55,9 @@ abstract class BaseMailer
 	{
 		$mail = new Mail($template, $this->basePath, $this->linkGenerator, $this->mailer, $this->translator);
 		$mail->setFrom($this->sender);
+		foreach ($this->variables as $variable => $value) {
+			$mail->{$variable} = $value;
+		}
 		return $mail;
 	}
 

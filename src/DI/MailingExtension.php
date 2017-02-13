@@ -18,6 +18,7 @@ class MailingExtension extends CompilerExtension
 	private $defaults = [
 		'mailer' => [],
 		'sender' => null,
+		'variables' => []
 	];
 
 	public function loadConfiguration()
@@ -28,6 +29,7 @@ class MailingExtension extends CompilerExtension
 		$counter = 1;
 		foreach ($config['mailer'] as $mailer) {
 			$sender = $config['sender'];
+			$variables = $config['variables'];
 			if ($mailer instanceof Statement) {
 				$class = $mailer->getEntity();
 				if (isset($mailer->arguments[0])) {
@@ -41,7 +43,7 @@ class MailingExtension extends CompilerExtension
 			$dir = dirname($rc->getFileName());
 			$builder->addDefinition($this->prefix('mailer.' . $counter++))
 				->setClass($class)
-				->setArguments([$sender, $dir]);
+				->setArguments([$sender, $variables, $dir]);
 		}
 	}
 

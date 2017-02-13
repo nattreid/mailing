@@ -6,6 +6,9 @@ extensions:
 
 mailing:
     sender: 'sender <info@test.cz>'
+    variables: # v latte mailu promenne
+        title: 'Test.cz' 
+        supportEmail: 'support@mail.com' 
     mailer: 
         - App/Mailer
         - App/Mailer2('sender2 <info2@test.cz>')

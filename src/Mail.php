@@ -39,7 +39,7 @@ class Mail
 
 		$this->latte->addFilter('translate', $translator === null ? null : [$translator, 'translate']);
 		$this->latte->addProvider('uiControl', $linkGenerator);
-		$this->latte->addFilter(null, 'NAttreid\Latte::common');
+		$this->latte->addFilter(null, 'NAttreid\Latte\Filters::common');
 
 		$this->basePath = $basePath . '/templates/';
 		$this->template = $template;
