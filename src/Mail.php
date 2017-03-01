@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace NAttreid\Mailing;
 
 use Latte\Engine;
@@ -13,25 +15,31 @@ use Nette\Mail\SendmailMailer;
 
 class Mail
 {
-
 	/** @var IMailer */
 	private $mailer;
+
 	/** @var string */
 	private $template;
+
 	/** @var array */
 	private $params;
+
 	/** @var Message */
 	private $message;
+
 	/** @var Engine */
 	private $latte;
+
 	/** @var bool */
 	private $fromString = false;
+
 	/** @var string */
 	private $basePath;
+
 	/** @var string */
 	private $imagePath = 'images/';
 
-	public function __construct($template, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
+	public function __construct(string $template, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
 	{
 		$this->latte = new Engine;
 
@@ -55,12 +63,12 @@ class Mail
 		$this->fromString = true;
 	}
 
-	public function __set($name, $value)
+	public function __set(string $name, $value)
 	{
 		$this->params[$name] = $value;
 	}
 
-	public function __get($name)
+	public function __get(string $name)
 	{
 		return $this->params[$name];
 	}
@@ -69,7 +77,7 @@ class Mail
 	 * Nastave cestu k obrazkum
 	 * @param string $path
 	 */
-	public function setImagePath($path)
+	public function setImagePath(string $path)
 	{
 		$this->imagePath = $path;
 	}
@@ -78,7 +86,7 @@ class Mail
 	 * Nastavi argumenty pro mailer
 	 * @param string $args
 	 */
-	public function setCommand($args)
+	public function setCommand(string $args)
 	{
 		if ($this->mailer instanceof SendmailMailer) {
 			$this->mailer->commandArgs = $args;
@@ -89,7 +97,7 @@ class Mail
 	 * Nastaveni returnPath pro SendmailMailer
 	 * @param string $mail
 	 */
-	public function setReturnPath($mail)
+	public function setReturnPath(string $mail)
 	{
 		$this->setCommand('-f' . $mail);
 	}
@@ -97,36 +105,36 @@ class Mail
 	/**
 	 * Nastavi Predmet
 	 * @param string $subject
-	 * @return Message
+	 * @return self
 	 */
-	public function setSubject($subject)
+	public function setSubject(string $subject): self
 	{
-		return $this->message->setSubject($subject);
+		$this->message->setSubject($subject);
+		return $this;
 	}
 
 	/**
 	 * Prida prijemce
 	 * @param string $email
 	 * @param string $name
-	 * @return Message
+	 * @return self
 	 */
-	public function addTo($email, $name = null)
+	public function addTo(string $email, string $name = null): self
 	{
-		return $this->message->addTo($email, $name);
+		$this->message->addTo($email, $name);
+		return $this;
 	}
 
 	/**
 	 * Nastavi odesilatele
 	 * @param string $email
 	 * @param string $name
-	 * @return Message
+	 * @return self
 	 */
-	public function setFrom($email, $name = null)
+	public function setFrom(string $email, string $name = null): self
 	{
-		if (!empty($email)) {
-			$this->message->setFrom($email, $name);
-		}
-		return $this->message;
+		$this->message->setFrom($email, $name);
+		return $this;
 	}
 
 	/**

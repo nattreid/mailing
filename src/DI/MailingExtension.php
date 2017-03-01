@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace NAttreid\Mailing\DI;
 
 use Nette\DI\CompilerExtension;

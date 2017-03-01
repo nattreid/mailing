@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace NAttreid\Mailing;
 
 use Nette\Application\LinkGenerator;
@@ -36,7 +38,7 @@ abstract class BaseMailer
 	/** @var ITranslator */
 	private $translator;
 
-	public function __construct($sender, array $variables, $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
+	public function __construct(string $sender, array $variables, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
 	{
 		$this->sender = $sender;
 		$this->variables = $variables;
@@ -51,7 +53,7 @@ abstract class BaseMailer
 	 * @param string $template
 	 * @return Mail
 	 */
-	protected function createMail($template)
+	protected function createMail(string $template): Mail
 	{
 		$mail = new Mail($template, $this->basePath, $this->linkGenerator, $this->mailer, $this->translator);
 		$mail->setFrom($this->sender);
@@ -63,12 +65,12 @@ abstract class BaseMailer
 
 	/**
 	 * Generuje link
-	 * @param $destination string destination in format "[[module:]presenter:]action" or "signal!" or "this"
-	 * @param $args array|mixed
+	 * @param string $destination destination in format "[[module:]presenter:]action" or "signal!" or "this"
+	 * @param array $args
 	 * @return string
 	 * @throws InvalidLinkException
 	 */
-	protected function link($destination, $args = [])
+	protected function link(string $destination, array $args = []): string
 	{
 		return $this->linkGenerator->link($destination, $args);
 	}
@@ -79,7 +81,7 @@ abstract class BaseMailer
 	 * @param  int $count plural count
 	 * @return string
 	 */
-	protected function translate($message, $count = null)
+	protected function translate(string $message, int $count = null): string
 	{
 		return $this->translator !== null ? $this->translator->translate($message, $count) : $message;
 	}
