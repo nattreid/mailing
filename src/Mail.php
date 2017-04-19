@@ -37,7 +37,7 @@ class Mail
 	private $basePath;
 
 	/** @var string */
-	private $imagePath = 'images/';
+	private $imagePath;
 
 	public function __construct(string $template, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ?ITranslator $translator)
 	{
@@ -50,6 +50,8 @@ class Mail
 		$this->latte->addFilter(null, 'NAttreid\Latte\Filters::common');
 
 		$this->basePath = $basePath . '/templates/';
+		$this->imagePath = $this->basePath . 'images/';
+
 		$this->template = $template;
 		$this->message = new Message;
 		$this->mailer = $mailer;
@@ -152,10 +154,10 @@ class Mail
 			$this->latte->setLoader(new StringLoader);
 			$body = $this->latte->renderToString($this->template, $this->params);
 		} else {
-			$body = $this->latte->renderToString($this->basePath . '/' . $this->template . '.latte', $this->params);
+			$body = $this->latte->renderToString($this->basePath . $this->template . '.latte', $this->params);
 		}
 
-		$this->message->setHtmlBody($body, $this->basePath . '/' . $this->imagePath);
+		$this->message->setHtmlBody($body, $this->imagePath);
 		$this->mailer->send($this->message);
 	}
 
