@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace NAttreid\Mailing;
 
@@ -39,7 +39,7 @@ class Mail
 	/** @var string */
 	private $imagePath = 'images/';
 
-	public function __construct(string $template, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
+	public function __construct(string $template, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ?ITranslator $translator)
 	{
 		$this->latte = new Engine;
 
@@ -58,7 +58,7 @@ class Mail
 	/**
 	 * Nastavi email na content z retezce
 	 */
-	public function fromString()
+	public function fromString(): void
 	{
 		$this->fromString = true;
 	}
@@ -76,30 +76,36 @@ class Mail
 	/**
 	 * Nastave cestu k obrazkum
 	 * @param string $path
+	 * @return self
 	 */
-	public function setImagePath(string $path)
+	public function setImagePath(string $path): self
 	{
 		$this->imagePath = $path;
+		return $this;
 	}
 
 	/**
 	 * Nastavi argumenty pro mailer
 	 * @param string $args
+	 * @return self
 	 */
-	public function setCommand(string $args)
+	public function setCommand(string $args): self
 	{
 		if ($this->mailer instanceof SendmailMailer) {
 			$this->mailer->commandArgs = $args;
 		}
+		return $this;
 	}
 
 	/**
 	 * Nastaveni returnPath pro SendmailMailer
 	 * @param string $mail
+	 * @return self
 	 */
-	public function setReturnPath(string $mail)
+	public function setReturnPath(string $mail): self
 	{
 		$this->setCommand('-f' . $mail);
+		return $this;
 	}
 
 	/**
@@ -140,7 +146,7 @@ class Mail
 	/**
 	 * Odesle mail
 	 */
-	public function send()
+	public function send(): void
 	{
 		if ($this->fromString) {
 			$this->latte->setLoader(new StringLoader);

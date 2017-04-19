@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace NAttreid\Mailing;
 
@@ -38,7 +38,7 @@ abstract class BaseMailer
 	/** @var ITranslator */
 	private $translator;
 
-	public function __construct(string $sender, array $variables, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ITranslator $translator = null)
+	public function __construct(string $sender, array $variables, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ?ITranslator $translator)
 	{
 		$this->sender = $sender;
 		$this->variables = $variables;
