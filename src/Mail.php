@@ -146,6 +146,19 @@ class Mail
 	}
 
 	/**
+	 * Prida prilohu
+	 * @param string $file
+	 * @param string|null $content
+	 * @param string|null $contentType
+	 * @return self
+	 */
+	public function addAttachment(string $file, string $content = null, string $contentType = null): self
+	{
+		$this->message->addAttachment($file, $content, $contentType);
+		return $this;
+	}
+
+	/**
 	 * Odesle mail
 	 */
 	public function send(): void
