@@ -90,4 +90,9 @@ abstract class BaseMailer
 		return $this->translator !== null ? $this->translator->translate($message, $count) : $message;
 	}
 
+	protected function getVariable(string $name):?string
+	{
+		return $this->variables[$name]?? null;
+	}
+
 }
