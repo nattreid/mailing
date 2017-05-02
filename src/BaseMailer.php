@@ -51,12 +51,16 @@ abstract class BaseMailer
 	/**
 	 * Vytvori instanci mailu
 	 * @param string $template
+	 * @param bool $fromString
 	 * @return Mail
 	 */
-	protected function createMail(string $template): Mail
+	protected function createMail(string $template, bool $fromString = false): Mail
 	{
 		$mail = new Mail($template, $this->basePath, $this->linkGenerator, $this->mailer, $this->translator);
 		$mail->setFrom($this->sender);
+		if ($fromString) {
+			$mail->fromString();
+		}
 		foreach ($this->variables as $variable => $value) {
 			$mail->{$variable} = $value;
 		}
