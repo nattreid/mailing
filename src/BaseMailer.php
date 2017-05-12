@@ -11,9 +11,9 @@ use Nette\Mail\IMailer;
 use Nette\SmartObject;
 
 /**
- * Mailer
+ * Class BaseMailer
  *
- * Attreid <attreid@gmail.com>
+ * @author Attreid <attreid@gmail.com>
  */
 abstract class BaseMailer
 {
@@ -51,19 +51,27 @@ abstract class BaseMailer
 	/**
 	 * Vytvori instanci mailu
 	 * @param string $template
-	 * @param bool $fromString
 	 * @return Mail
 	 */
-	protected function createMail(string $template, bool $fromString = false): Mail
+	protected function createMail(string $template): Mail
 	{
 		$mail = new Mail($template, $this->basePath, $this->linkGenerator, $this->mailer, $this->translator);
 		$mail->setFrom($this->sender);
-		if ($fromString) {
-			$mail->fromString();
-		}
 		foreach ($this->variables as $variable => $value) {
 			$mail->{$variable} = $value;
 		}
+		return $mail;
+	}
+
+	/**
+	 * Vytvori instanci mailu
+	 * @param string $latte
+	 * @return Mail
+	 */
+	protected function createMailFromString(string $latte): Mail
+	{
+		$mail = $this->createMail($latte);
+		$mail->setStringLoader();
 		return $mail;
 	}
 

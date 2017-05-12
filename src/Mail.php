@@ -13,6 +13,11 @@ use Nette\Mail\IMailer;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
 
+/**
+ * Class Mail
+ *
+ * @author Attreid <attreid@gmail.com>
+ */
 class Mail
 {
 	/** @var IMailer */
@@ -30,14 +35,14 @@ class Mail
 	/** @var Engine */
 	private $latte;
 
-	/** @var bool */
-	private $fromString = false;
-
 	/** @var string */
 	private $basePath;
 
 	/** @var string */
 	private $imagePath;
+
+	/** @var StringLoader */
+	private $loader;
 
 	public function __construct(string $template, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ?ITranslator $translator)
 	{
@@ -60,9 +65,9 @@ class Mail
 	/**
 	 * Nastavi email na content z retezce
 	 */
-	public function fromString(): void
+	public function setStringLoader(): void
 	{
-		$this->fromString = true;
+		$this->loader = new StringLoader;
 	}
 
 	public function __set(string $name, $value)
@@ -163,8 +168,8 @@ class Mail
 	 */
 	public function send(): void
 	{
-		if ($this->fromString) {
-			$this->latte->setLoader(new StringLoader);
+		if ($this->loader !== null) {
+			$this->latte->setLoader($this->loader);
 			$body = $this->latte->renderToString($this->template, $this->params);
 		} else {
 			$body = $this->latte->renderToString($this->basePath . $this->template . '.latte', $this->params);
