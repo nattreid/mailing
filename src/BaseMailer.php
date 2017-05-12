@@ -6,8 +6,6 @@ namespace NAttreid\Mailing;
 
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\InvalidLinkException;
-use Nette\Localization\ITranslator;
-use Nette\Mail\IMailer;
 use Nette\SmartObject;
 
 /**
@@ -23,29 +21,21 @@ abstract class BaseMailer
 	/** @var string */
 	private $sender;
 
-	/** @var string[] */
-	private $variables;
-
 	/** @var string */
 	private $basePath;
 
-	/** @var IMailer */
-	private $mailer;
+	/** @var IMailFactory */
+	private $mailFactory;
 
 	/** @var LinkGenerator */
 	private $linkGenerator;
 
-	/** @var ITranslator */
-	private $translator;
-
-	public function __construct(string $sender, array $variables, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ?ITranslator $translator)
+	public function __construct(string $sender, string $basePath, IMailFactory $mailFactory, LinkGenerator $linkGenerator)
 	{
 		$this->sender = $sender;
-		$this->variables = $variables;
 		$this->basePath = $basePath;
-		$this->mailer = $mailer;
+		$this->mailFactory = $mailFactory;
 		$this->linkGenerator = $linkGenerator;
-		$this->translator = $translator;
 	}
 
 	/**
@@ -55,11 +45,8 @@ abstract class BaseMailer
 	 */
 	protected function createMail(string $template): Mail
 	{
-		$mail = new Mail($template, $this->basePath, $this->linkGenerator, $this->mailer, $this->translator);
+		$mail = $this->mailFactory->create($template, $this->basePath);
 		$mail->setFrom($this->sender);
-		foreach ($this->variables as $variable => $value) {
-			$mail->{$variable} = $value;
-		}
 		return $mail;
 	}
 
@@ -87,20 +74,8 @@ abstract class BaseMailer
 		return $this->linkGenerator->link($destination, $args);
 	}
 
-	/**
-	 * Translates the given string.
-	 * @param  string $message message
-	 * @param  int $count plural count
-	 * @return string
-	 */
-	protected function translate(string $message, int $count = null): string
+	protected function getVariable(string $name): ?string
 	{
-		return $this->translator !== null ? $this->translator->translate($message, $count) : $message;
+		return $this->variables[$name] ?? null;
 	}
-
-	protected function getVariable(string $name):?string
-	{
-		return $this->variables[$name]?? null;
-	}
-
 }

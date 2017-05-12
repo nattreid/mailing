@@ -27,14 +27,13 @@ class Mailer extends \NAttreid\Mailing\BaseMailer {
     public function sendRestorePassword($email, $hash) {
         $mail = $this->createMail('template');
         // nebo
-        $mail = $this->createMail('<body><p>sablona jako string</p></body>);
-        $mail->fromString();
+        $mail = $this->createMailFromString('<body><p>sablona jako string</p></body>);
 
         $mail->link = $this->link('someLink', [
             'hash' => $hash
         ]);
 
-        $mail->setSubject($this->translate('translateMessage'))
+        $mail->setSubject('translateMessage')
                 ->addTo($email);
 
         $mail->send();

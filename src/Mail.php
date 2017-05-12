@@ -7,6 +7,7 @@ namespace NAttreid\Mailing;
 use Latte\Engine;
 use Latte\Loaders\StringLoader;
 use Nette\Application\LinkGenerator;
+use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\Bridges\ApplicationLatte\UIMacros;
 use Nette\Localization\ITranslator;
 use Nette\Mail\IMailer;
@@ -23,11 +24,14 @@ class Mail
 	/** @var IMailer */
 	private $mailer;
 
+	/** @var ITranslator */
+	private $translator;
+
 	/** @var string */
 	private $template;
 
 	/** @var array */
-	private $params;
+	private $variables;
 
 	/** @var Message */
 	private $message;
@@ -44,13 +48,12 @@ class Mail
 	/** @var StringLoader */
 	private $loader;
 
-	public function __construct(string $template, string $basePath, LinkGenerator $linkGenerator, IMailer $mailer, ?ITranslator $translator)
+	public function __construct(string $template, string $basePath, ILatteFactory $latteFactory, LinkGenerator $linkGenerator, IMailer $mailer, ?ITranslator $translator)
 	{
-		$this->latte = new Engine;
+		$this->latte = $latteFactory->create();
 
 		UIMacros::install($this->latte->getCompiler());
 
-		$this->latte->addFilter('translate', $translator === null ? null : [$translator, 'translate']);
 		$this->latte->addProvider('uiControl', $linkGenerator);
 		$this->latte->addFilter(null, 'NAttreid\Latte\Filters::common');
 
@@ -60,6 +63,15 @@ class Mail
 		$this->template = $template;
 		$this->message = new Message;
 		$this->mailer = $mailer;
+
+		$this->setTranslator($translator);
+	}
+
+
+	public function setTranslator(ITranslator $translator = null)
+	{
+		$this->latte->addFilter('translate', $translator === null ? null : [$translator, 'translate']);
+		$this->translator = $translator;
 	}
 
 	/**
@@ -70,14 +82,19 @@ class Mail
 		$this->loader = new StringLoader;
 	}
 
+	public function setVariables(array $variables): void
+	{
+		$this->variables = $variables;
+	}
+
 	public function __set(string $name, $value)
 	{
-		$this->params[$name] = $value;
+		$this->variables[$name] = $value;
 	}
 
 	public function __get(string $name)
 	{
-		return $this->params[$name];
+		return $this->variables[$name];
 	}
 
 	/**
@@ -116,13 +133,13 @@ class Mail
 	}
 
 	/**
-	 * Nastavi Predmet
-	 * @param string $subject
+	 * Nastavi predmet
+	 * @param mixed $subject
 	 * @return self
 	 */
-	public function setSubject(string $subject): self
+	public function setSubject($subject): self
 	{
-		$this->message->setSubject($subject);
+		$this->message->setSubject($this->translator ? $this->translator->translate($subject) : (string) $subject);
 		return $this;
 	}
 
@@ -170,13 +187,17 @@ class Mail
 	{
 		if ($this->loader !== null) {
 			$this->latte->setLoader($this->loader);
-			$body = $this->latte->renderToString($this->template, $this->params);
+			$body = $this->latte->renderToString($this->template, $this->variables);
 		} else {
-			$body = $this->latte->renderToString($this->basePath . $this->template . '.latte', $this->params);
+			$body = $this->latte->renderToString($this->basePath . $this->template . '.latte', $this->variables);
 		}
 
 		$this->message->setHtmlBody($body, $this->imagePath);
 		$this->mailer->send($this->message);
 	}
+}
 
+interface IMailFactory
+{
+	public function create(string $template, string $basePath): Mail;
 }
