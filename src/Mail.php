@@ -13,6 +13,7 @@ use Nette\Localization\ITranslator;
 use Nette\Mail\IMailer;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
+use Nette\SmartObject;
 
 /**
  * Class Mail
@@ -21,6 +22,11 @@ use Nette\Mail\SendmailMailer;
  */
 class Mail
 {
+	use SmartObject;
+
+	/** @var callback[] */
+	public $onSend = [];
+
 	/** @var IMailer */
 	private $mailer;
 
@@ -67,11 +73,17 @@ class Mail
 		$this->setTranslator($translator);
 	}
 
-
-	public function setTranslator(ITranslator $translator = null)
+	public function addFilter(string $name, ?callable $callback): self
 	{
-		$this->latte->addFilter('translate', $translator === null ? null : [$translator, 'translate']);
+		$this->latte->addFilter($name, $callback);
+		return $this;
+	}
+
+	public function setTranslator(ITranslator $translator = null): self
+	{
+		$this->addFilter('translate', $translator === null ? null : [$translator, 'translate']);
 		$this->translator = $translator;
+		return $this;
 	}
 
 	/**
@@ -194,6 +206,8 @@ class Mail
 
 		$this->message->setHtmlBody($body, $this->imagePath);
 		$this->mailer->send($this->message);
+
+		$this->onSend();
 	}
 }
 
