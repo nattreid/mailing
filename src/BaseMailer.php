@@ -73,9 +73,4 @@ abstract class BaseMailer
 	{
 		return $this->linkGenerator->link($destination, $args);
 	}
-
-	protected function getVariable(string $name): ?string
-	{
-		return $this->variables[$name] ?? null;
-	}
 }
