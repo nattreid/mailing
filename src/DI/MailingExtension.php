@@ -50,7 +50,7 @@ class MailingExtension extends CompilerExtension
 			$rc = new ClassType($mailer);
 			$dir = dirname($rc->getFileName());
 			$builder->addDefinition($this->prefix('mailer.' . $counter++))
-				->setClass($class)
+				->setType($class)
 				->setArguments([$sender, $dir]);
 		}
 	}
