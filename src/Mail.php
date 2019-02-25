@@ -54,6 +54,9 @@ class Mail
 	/** @var StringLoader */
 	private $loader;
 
+	/** @var string[] */
+	private $recipients = [];
+
 	public function __construct(string $template, string $basePath, ILatteFactory $latteFactory, LinkGenerator $linkGenerator, IMailer $mailer, ?ITranslator $translator)
 	{
 		$this->latte = $latteFactory->create();
@@ -71,6 +74,11 @@ class Mail
 		$this->mailer = $mailer;
 
 		$this->setTranslator($translator);
+	}
+
+	public function getRecipients(): array
+	{
+		return $this->recipients;
 	}
 
 	public function addFilter(string $name, ?callable $callback): self
@@ -164,6 +172,7 @@ class Mail
 	public function addTo(string $email, string $name = null): self
 	{
 		$this->message->addTo($email, $name);
+		$this->recipients[] = $email;
 		return $this;
 	}
 
@@ -194,9 +203,13 @@ class Mail
 
 	/**
 	 * Odesle mail
+	 * @throws NoRecipientException
 	 */
 	public function send(): void
 	{
+		if (count($this->recipients) === 0) {
+			throw new NoRecipientException();
+		}
 		if ($this->loader !== null) {
 			$this->latte->setLoader($this->loader);
 			$body = $this->latte->renderToString($this->template, $this->variables);
