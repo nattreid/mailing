@@ -83,7 +83,8 @@ class Mail
 
 	public function addFilter(string $name, ?callable $callback): self
 	{
-		$this->latte->addFilter($name, $callback);
+		$this->latte->addFilter($name, $callback ?? function () {
+			});
 		return $this;
 	}
 
