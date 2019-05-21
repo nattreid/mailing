@@ -13,14 +13,14 @@
   ],
   "require": {
     "php": ">= 7.1",
-    "nette/application": "~2.4",
-    "nette/mail": "~2.4",
-    "nette/di": "~2.4",
+    "nette/application": "~3.0",
+    "nette/mail": "~3.0",
+    "nette/di": "~3.0",
     "nattreid/latte": "~1.0"
   },
   "require-dev": {
-    "nette/tester": "~1.7",
-    "tracy/tracy": "~2.4"
+    "nette/tester": "~2.2",
+    "tracy/tracy": "~2.6"
   },
   "autoload": {
     "classmap": [
