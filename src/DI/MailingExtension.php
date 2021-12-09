@@ -30,8 +30,9 @@ class MailingExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->validateConfig($this->defaults, $this->config);
 
-		$builder->addDefinition($this->prefix('mailFactory'))
+		$builder->addFactoryDefinition($this->prefix('mailFactory'))
 			->setImplement(IMailFactory::class)
+			->getResultDefinition()
 			->setFactory(Mail::class)
 			->addSetup('setVariables', [$config['variables']]);
 
